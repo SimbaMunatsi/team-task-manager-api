@@ -72,3 +72,13 @@ team-task-manager-api/
 ├── README.md
 └── requirements.txt
 '''
+
+
+## Setup
+
+1. Create and activate a virtual environment
+2. Install dependencies with `pip install -r requirements.txt`
+3. Configure your `.env` file
+4. Create the PostgreSQL database
+5. Run `alembic upgrade head`
+6. Start the API with `uvicorn app.main:app --reload`
