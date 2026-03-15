@@ -9,6 +9,8 @@ from app.core.config import settings
 from app.db.base import Base
 from app.models.user import User  # noqa: F401
 from app.models.task import Task  # noqa: F401
+from app.models.team import Team  # noqa: E402, F401
+from app.models.team_member import TeamMember  # noqa: E402, F401
 
 config = context.config
 
