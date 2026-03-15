@@ -82,3 +82,20 @@ team-task-manager-api/
 4. Create the PostgreSQL database
 5. Run `alembic upgrade head`
 6. Start the API with `uvicorn app.main:app --reload`
+
+
+## Authentication
+
+This API uses JWT bearer authentication for protected routes.
+
+### Auth Flow
+
+1. Register a user with `/api/v1/auth/register`
+2. Log in with `/api/v1/auth/login`
+3. Copy the returned access token
+4. Authorize in Swagger UI
+5. Access protected routes like `/api/v1/users/me`
+
+### Protected Route Example
+
+- `GET /api/v1/users/me`
