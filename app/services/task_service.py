@@ -1,3 +1,5 @@
+from datetime import date
+
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
@@ -8,17 +10,49 @@ from app.crud.task import (
     soft_delete_task,
     update_task,
 )
-from app.models.task import Task
+from app.models.task import Task, TaskPriority, TaskStatus
 from app.models.user import User
-from app.schemas.task import TaskCreate, TaskUpdate
+from app.schemas.task import TaskCreate, TaskListResponse, TaskUpdate
 
 
 def create_task_for_user(db: Session, *, task_in: TaskCreate, current_user: User) -> Task:
     return create_task(db, task_in=task_in, created_by=current_user.id)
 
 
-def list_tasks_for_user(db: Session, *, current_user: User) -> list[Task]:
-    return get_tasks_by_owner(db, owner_id=current_user.id)
+def list_tasks_for_user(
+    db: Session,
+    *,
+    current_user: User,
+    page: int = 1,
+    page_size: int = 10,
+    status: TaskStatus | None = None,
+    priority: TaskPriority | None = None,
+    due_date_from: date | None = None,
+    due_date_to: date | None = None,
+    search: str | None = None,
+    sort_by: str = "created_at",
+    sort_order: str = "desc",
+) -> TaskListResponse:
+    items, total = get_tasks_by_owner(
+        db,
+        owner_id=current_user.id,
+        page=page,
+        page_size=page_size,
+        status=status,
+        priority=priority,
+        due_date_from=due_date_from,
+        due_date_to=due_date_to,
+        search=search,
+        sort_by=sort_by,
+        sort_order=sort_order,
+    )
+
+    return TaskListResponse(
+        items=items,
+        page=page,
+        page_size=page_size,
+        total=total,
+    )
 
 
 def get_user_task_or_404(db: Session, *, task_id: int, current_user: User) -> Task:
