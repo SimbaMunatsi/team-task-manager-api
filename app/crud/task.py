@@ -4,6 +4,7 @@ from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from app.models.task import Task, TaskPriority, TaskStatus
+from app.models.team_member import TeamMember
 from app.schemas.task import TaskCreate, TaskUpdate
 
 
@@ -15,6 +16,8 @@ def create_task(db: Session, *, task_in: TaskCreate, created_by: int) -> Task:
         priority=task_in.priority,
         due_date=task_in.due_date,
         created_by=created_by,
+        team_id=task_in.team_id,
+        assigned_to=task_in.assigned_to,
     )
     db.add(task)
     db.commit()
@@ -30,10 +33,10 @@ def get_task_by_id(db: Session, task_id: int) -> Task | None:
     return db.execute(statement).scalar_one_or_none()
 
 
-def get_tasks_by_owner(
+def get_tasks_visible_to_user(
     db: Session,
     *,
-    owner_id: int,
+    user_id: int,
     page: int = 1,
     page_size: int = 10,
     status: TaskStatus | None = None,
@@ -44,10 +47,16 @@ def get_tasks_by_owner(
     sort_by: str = "created_at",
     sort_order: str = "desc",
 ) -> tuple[list[Task], int]:
-    filters = [
-        Task.created_by == owner_id,
-        Task.deleted_at.is_(None),
-    ]
+    base_filters = [Task.deleted_at.is_(None)]
+
+    visibility_filter = or_(
+        Task.created_by == user_id,
+        Task.team_id.in_(
+            select(TeamMember.team_id).where(TeamMember.user_id == user_id)
+        ),
+    )
+
+    filters = [*base_filters, visibility_filter]
 
     if status is not None:
         filters.append(Task.status == status)
@@ -80,10 +89,7 @@ def get_tasks_by_owner(
     }
     sort_column = sort_column_map.get(sort_by, Task.created_at)
 
-    if sort_order == "asc":
-        order_clause = sort_column.asc()
-    else:
-        order_clause = sort_column.desc()
+    order_clause = sort_column.asc() if sort_order == "asc" else sort_column.desc()
 
     statement = (
         select(Task)

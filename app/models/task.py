@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import date, datetime
 from enum import Enum
 
 from sqlalchemy import Date, DateTime, ForeignKey, Integer, String, Text
@@ -43,6 +43,18 @@ class Task(Base):
     created_by: Mapped[int] = mapped_column(
         ForeignKey("users.id", ondelete="CASCADE"),
         nullable=False,
+        index=True,
+    )
+
+    team_id: Mapped[int | None] = mapped_column(
+        ForeignKey("teams.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
+
+    assigned_to: Mapped[int | None] = mapped_column(
+        ForeignKey("users.id", ondelete="SET NULL"),
+        nullable=True,
         index=True,
     )
 
