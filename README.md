@@ -133,3 +133,22 @@ This API uses JWT bearer authentication for protected routes.
 - `GET /api/v1/tasks/{task_id}`
 - `PATCH /api/v1/tasks/{task_id}`
 - `DELETE /api/v1/tasks/{task_id}`
+
+## Task Query Features
+
+The task listing endpoint supports:
+- pagination
+- filtering by status
+- filtering by priority
+- filtering by due date range
+- search by title or description
+- sorting by `created_at`, `due_date`, or `priority`
+
+### Example Queries
+
+- `GET /api/v1/tasks?page=1&page_size=10`
+- `GET /api/v1/tasks?status=done`
+- `GET /api/v1/tasks?priority=high`
+- `GET /api/v1/tasks?search=bug`
+- `GET /api/v1/tasks?sort_by=due_date&sort_order=desc`
+- `GET /api/v1/tasks?status=todo&priority=high&search=bug`

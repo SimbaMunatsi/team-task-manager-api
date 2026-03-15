@@ -1,4 +1,5 @@
 from datetime import date, datetime
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -33,3 +34,14 @@ class TaskResponse(TaskBase):
     deleted_at: datetime | None = None
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class TaskListResponse(BaseModel):
+    items: list[TaskResponse]
+    page: int
+    page_size: int
+    total: int
+
+
+SortByType = Literal["created_at", "due_date", "priority"]
+SortOrderType = Literal["asc", "desc"]
