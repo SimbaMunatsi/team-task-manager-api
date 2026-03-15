@@ -88,7 +88,7 @@ team-task-manager-api/
 
 This API uses JWT bearer authentication for protected routes.
 
-### Auth Flow
+### Auth Flow 
 
 1. Register a user with `/api/v1/auth/register`
 2. Log in with `/api/v1/auth/login`
@@ -99,3 +99,37 @@ This API uses JWT bearer authentication for protected routes.
 ### Protected Route Example
 
 - `GET /api/v1/users/me`
+
+## Features Implemented
+
+- User registration
+- User login
+- JWT authentication
+- Current user endpoint
+- Task CRUD
+- Task ownership
+- Soft delete
+
+## Task Fields
+
+- title
+- description
+- status
+- priority
+- due_date
+
+## Initial Endpoints
+
+### Auth
+- `POST /api/v1/auth/register`
+- `POST /api/v1/auth/login`
+
+### Users
+- `GET /api/v1/users/me`
+
+### Tasks
+- `POST /api/v1/tasks`
+- `GET /api/v1/tasks`
+- `GET /api/v1/tasks/{task_id}`
+- `PATCH /api/v1/tasks/{task_id}`
+- `DELETE /api/v1/tasks/{task_id}`
