@@ -15,7 +15,8 @@ class TaskBase(BaseModel):
 
 
 class TaskCreate(TaskBase):
-    pass
+    team_id: int | None = None
+    assigned_to: int | None = None
 
 
 class TaskUpdate(BaseModel):
@@ -24,11 +25,14 @@ class TaskUpdate(BaseModel):
     status: TaskStatus | None = None
     priority: TaskPriority | None = None
     due_date: date | None = None
+    assigned_to: int | None = None
 
 
 class TaskResponse(TaskBase):
     id: int
     created_by: int
+    team_id: int | None = None
+    assigned_to: int | None = None
     created_at: datetime
     updated_at: datetime
     deleted_at: datetime | None = None
