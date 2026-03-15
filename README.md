@@ -175,3 +175,19 @@ Team admins can:
 Regular members can:
 - view teams they belong to
 - view team membership
+
+## Authorization and RBAC
+
+This project combines ownership-based access control with simple team-based RBAC.
+
+### Task permissions
+- personal tasks are only visible to their creator
+- team tasks are visible to members of the team
+- task creator can update or delete their own task
+- team admin can update or delete any task in their team
+- only valid team members can be assigned to a team task
+- only team admins can assign or reassign team tasks
+
+### Team permissions
+- all team members can view team resources
+- only team admins can manage membership
