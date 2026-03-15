@@ -152,3 +152,26 @@ The task listing endpoint supports:
 - `GET /api/v1/tasks?search=bug`
 - `GET /api/v1/tasks?sort_by=due_date&sort_order=desc`
 - `GET /api/v1/tasks?status=todo&priority=high&search=bug`
+
+## Core Entities
+
+- Users
+- Teams
+- Team Members
+- Tasks
+- Comments
+
+## Team Membership
+
+Teams support multi-user collaboration through a membership table with role-based access.
+
+When a user creates a team, they are automatically added as an `admin`.
+
+Team admins can:
+- add members
+- remove members
+- manage team resources
+
+Regular members can:
+- view teams they belong to
+- view team membership
