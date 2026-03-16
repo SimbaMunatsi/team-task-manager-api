@@ -6,6 +6,9 @@ from app.crud.team_member import get_team_member
 from app.models.task import Task
 from app.models.team_member import TeamMember, TeamRole
 from app.models.user import User
+from app.crud.comment import get_comment_by_id
+from app.crud.task import get_task_by_id
+from app.models.comment import Comment
 
 
 def get_team_membership_or_none(
@@ -129,3 +132,52 @@ def ensure_assignee_in_same_team(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Assignee must belong to the same team.",
         )
+    
+def require_comment_create_permission(
+    db: Session,
+    *,
+    task: Task,
+    current_user: User,
+) -> None:
+    require_task_view_permission(db, task=task, current_user=current_user)
+
+
+def require_comment_edit_permission(
+    db: Session,
+    *,
+    comment: Comment,
+    current_user: User,
+    task: Task,
+) -> None:
+    if comment.user_id == current_user.id:
+        return
+
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail="You are not allowed to edit this comment.",
+    )
+
+
+def require_comment_delete_permission(
+    db: Session,
+    *,
+    comment: Comment,
+    current_user: User,
+    task: Task,
+) -> None:
+    if comment.user_id == current_user.id:
+        return
+
+    if task.team_id is not None:
+        membership = get_team_membership_or_none(
+            db,
+            team_id=task.team_id,
+            user_id=current_user.id,
+        )
+        if membership and membership.role == TeamRole.ADMIN:
+            return
+
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail="You are not allowed to delete this comment.",
+    )    

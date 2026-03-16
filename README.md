@@ -191,3 +191,24 @@ This project combines ownership-based access control with simple team-based RBAC
 ### Team permissions
 - all team members can view team resources
 - only team admins can manage membership
+
+## Comments
+
+The API supports task comments for collaborative discussion.
+
+Users can comment on:
+- their own personal tasks
+- team tasks in teams they belong to
+
+### Comment permissions
+- comment owner can update or delete their own comment
+- team admin can delete comments on team tasks
+- deleted comments are soft deleted and excluded from normal reads
+
+## Logging
+
+The API includes simple request logging middleware that records:
+- HTTP method
+- request path
+- response status code
+- request duration
