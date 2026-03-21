@@ -212,3 +212,4 @@ The API includes simple request logging middleware that records:
 - request path
 - response status code
 - request duration
+
