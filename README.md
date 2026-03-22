@@ -1,215 +1,402 @@
-# Team Task Manager API
+# 🚀 Team Task Manager API
 
-A production-aware FastAPI backend for managing users, teams, tasks, assignments, and comments with JWT authentication, RBAC, filtering, pagination, and Docker support.
+![Python](https://img.shields.io/badge/Python-3.11-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-Production-green)
+![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-blue)
+![Streamlit](https://img.shields.io/badge/Frontend-Streamlit-orange)
+![Status](https://img.shields.io/badge/Status-Active-success)
 
-## Tech Stack
+A **production-style backend system** for managing users, teams, tasks, assignments, and comments — designed to simulate real-world SaaS collaboration workflows.
 
-- FastAPI
-- PostgreSQL
-- SQLAlchemy
-- Alembic
-- Pydantic
-- JWT Authentication
-- Pytest
-- Docker
-
-## Project Structure
-
-```text
-app/
-api/
-core/
-db/
-models/
-schemas/
-crud/
-services/
-tests/
-
-
+Built with **FastAPI, PostgreSQL, and Streamlit**, this project demonstrates backend engineering fundamentals including authentication, RBAC, modular architecture, and scalable query design.
 
 ---
 
-# Full Day 1 file tree
+## 🧠 Overview
+
+Most CRUD projects stop at basic data operations.
+
+This project goes further by modeling:
+
+* multi-user collaboration
+* role-based access control (RBAC)
+* team-scoped data visibility
+* task assignment constraints
+* advanced querying patterns
+
+> **Goal:** Build a backend that behaves like a real production system — not just a demo API.
+
+---
+
+## 🧱 System Architecture
+
+```text
+Client (Streamlit / API Consumer)
+        ↓
+FastAPI API Layer (Routing, Validation)
+        ↓
+Service Layer (Business Logic)
+        ↓
+Permission Layer (RBAC Rules)
+        ↓
+CRUD Layer (Database Access)
+        ↓
+PostgreSQL Database
+```
+
+### Why this matters
+
+* separation of concerns
+* scalable backend design
+* clean business logic boundaries
+* easier testing and maintenance
+
+---
+
+## ✨ Core Features
+
+### 🔐 Authentication & Security
+
+* JWT-based authentication
+* secure password hashing (bcrypt)
+* OAuth2-compatible login flow
+* protected routes via dependency injection
+
+---
+
+### 👥 Multi-Tenant Team System
+
+* users can belong to multiple teams
+* automatic admin assignment on team creation
+* role-based permissions (admin/member)
+* strict membership validation
+
+---
+
+### 📋 Task Management
+
+* personal and team-scoped tasks
+* task assignment to team members
+* validation of assignment constraints
+* soft deletion for data integrity
+
+---
+
+### 💬 Collaboration Layer
+
+* comments on tasks
+* ownership-based permissions
+* admin moderation capabilities
+* full CRUD operations
+
+---
+
+### 🔎 Advanced Querying
+
+Supports:
+
+* pagination (`page`, `page_size`)
+* filtering (status, priority)
+* search (title, description)
+* sorting (created_at, due_date)
+
+> Designed to mimic real production APIs.
+
+---
+
+## 🧩 Core Data Model
+
+| Entity      | Description                        |
+| ----------- | ---------------------------------- |
+| Users       | authenticated system users         |
+| Teams       | collaborative groups               |
+| TeamMembers | user-team relationships with roles |
+| Tasks       | actionable work items              |
+| Comments    | communication layer on tasks       |
+
+---
+
+## ⚙️ Tech Stack
+
+### Backend
+
+* FastAPI
+* PostgreSQL
+* SQLAlchemy
+* Alembic
+* Pydantic
+
+### Auth & Security
+
+* JWT
+* OAuth2PasswordRequestForm
+* bcrypt
+
+### Testing
+
+* Pytest
+
+### Frontend Demo
+
+* Streamlit
+
+---
+
+## 🗂️ Project Structure
 
 ```text
 team-task-manager-api/
 │
 ├── app/
-│   ├── __init__.py
 │   ├── main.py
-│   │
 │   ├── api/
-│   │   ├── __init__.py
 │   │   └── v1/
-│   │       ├── __init__.py
 │   │       ├── api.py
 │   │       └── endpoints/
-│   │           ├── __init__.py
 │   │           └── health.py
 │   │
 │   ├── core/
-│   │   ├── __init__.py
 │   │   └── config.py
 │   │
 │   ├── db/
-│   │   ├── __init__.py
 │   │   ├── base.py
 │   │   └── session.py
 │   │
 │   ├── models/
-│   │   └── __init__.py
 │   ├── schemas/
-│   │   └── __init__.py
 │   ├── crud/
-│   │   └── __init__.py
 │   └── services/
-│       └── __init__.py
 │
 ├── tests/
+├── scripts/
 ├── .env
 ├── .env.example
-├── README.md
-└── requirements.txt
-'''
+├── requirements.txt
+└── README.md
+```
 
+---
 
-## Setup
+## ⚡ Getting Started
 
-1. Create and activate a virtual environment
-2. Install dependencies with `pip install -r requirements.txt`
-3. Configure your `.env` file
-4. Create the PostgreSQL database
-5. Run `alembic upgrade head`
-6. Start the API with `uvicorn app.main:app --reload`
+### 1. Clone the Repository
 
+```bash
+git clone https://github.com/SimbaMunatsi/team-task-manager-api.git
+cd team-task-manager-api
+```
 
-## Authentication
+---
 
-This API uses JWT bearer authentication for protected routes.
+### 2. Create Virtual Environment
 
-### Auth Flow 
+```bash
+python -m venv venv
+```
 
-1. Register a user with `/api/v1/auth/register`
-2. Log in with `/api/v1/auth/login`
-3. Copy the returned access token
-4. Authorize in Swagger UI
-5. Access protected routes like `/api/v1/users/me`
+#### Activate
 
-### Protected Route Example
+**Windows**
 
-- `GET /api/v1/users/me`
+```bash
+venv\Scripts\activate
+```
 
-## Features Implemented
+**Mac/Linux**
 
-- User registration
-- User login
-- JWT authentication
-- Current user endpoint
-- Task CRUD
-- Task ownership
-- Soft delete
+```bash
+source venv/bin/activate
+```
 
-## Task Fields
+---
 
-- title
-- description
-- status
-- priority
-- due_date
+### 3. Install Dependencies
 
-## Initial Endpoints
+```bash
+pip install -r requirements.txt
+```
 
-### Auth
-- `POST /api/v1/auth/register`
-- `POST /api/v1/auth/login`
+---
 
-### Users
-- `GET /api/v1/users/me`
+### 4. Configure Environment Variables
 
-### Tasks
-- `POST /api/v1/tasks`
-- `GET /api/v1/tasks`
-- `GET /api/v1/tasks/{task_id}`
-- `PATCH /api/v1/tasks/{task_id}`
-- `DELETE /api/v1/tasks/{task_id}`
+Create a `.env` file:
 
-## Task Query Features
+```env
+DATABASE_URL=postgresql://postgres:password@localhost:5432/team_task_manager
+SECRET_KEY=your-secret-key
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+STREAMLIT_API_BASE_URL=http://127.0.0.1:8000/api/v1
+```
 
-The task listing endpoint supports:
-- pagination
-- filtering by status
-- filtering by priority
-- filtering by due date range
-- search by title or description
-- sorting by `created_at`, `due_date`, or `priority`
+---
 
-### Example Queries
+### 5. Run Database Migrations
 
-- `GET /api/v1/tasks?page=1&page_size=10`
-- `GET /api/v1/tasks?status=done`
-- `GET /api/v1/tasks?priority=high`
-- `GET /api/v1/tasks?search=bug`
-- `GET /api/v1/tasks?sort_by=due_date&sort_order=desc`
-- `GET /api/v1/tasks?status=todo&priority=high&search=bug`
+```bash
+alembic upgrade head
+```
 
-## Core Entities
+---
 
-- Users
-- Teams
-- Team Members
-- Tasks
-- Comments
+### 6. Start FastAPI Backend
 
-## Team Membership
+```bash
+uvicorn app.main:app --reload
+```
 
-Teams support multi-user collaboration through a membership table with role-based access.
+API Docs:
 
-When a user creates a team, they are automatically added as an `admin`.
+```
+http://127.0.0.1:8000/docs
+```
 
-Team admins can:
-- add members
-- remove members
-- manage team resources
+---
 
-Regular members can:
-- view teams they belong to
-- view team membership
+### 7. Start Streamlit Frontend
 
-## Authorization and RBAC
+```bash
+streamlit run streamlit_app.py
+```
 
-This project combines ownership-based access control with simple team-based RBAC.
+App UI:
 
-### Task permissions
-- personal tasks are only visible to their creator
-- team tasks are visible to members of the team
-- task creator can update or delete their own task
-- team admin can update or delete any task in their team
-- only valid team members can be assigned to a team task
-- only team admins can assign or reassign team tasks
+```
+http://127.0.0.1:8501
+```
 
-### Team permissions
-- all team members can view team resources
-- only team admins can manage membership
+---
 
-## Comments
+## 🔐 Authentication Details
 
-The API supports task comments for collaborative discussion.
+Login uses **OAuth2 form-based authentication**.
 
-Users can comment on:
-- their own personal tasks
-- team tasks in teams they belong to
+Required format:
 
-### Comment permissions
-- comment owner can update or delete their own comment
-- team admin can delete comments on team tasks
-- deleted comments are soft deleted and excluded from normal reads
+```text
+username=<email>
+password=<password>
+```
 
-## Logging
+Include JWT token in requests:
 
-The API includes simple request logging middleware that records:
-- HTTP method
-- request path
-- response status code
-- request duration
+```text
+Authorization: Bearer <token>
+```
 
+---
+
+## 🧪 Testing
+
+Run tests:
+
+```bash
+pytest
+```
+
+### Coverage Includes
+
+* authentication flow
+* RBAC enforcement
+* task CRUD operations
+* team membership rules
+* assignment validation
+* comment system logic
+
+---
+
+## 🌱 Seed Data
+
+```bash
+python scripts/seed_data.py
+```
+
+Creates:
+
+* demo users
+* teams
+* tasks
+* comments
+
+---
+
+## 🖥️ Streamlit Demo Features
+
+* user registration & login
+* team creation and management
+* task creation and assignment
+* comment system
+* filtering and searching tasks
+
+---
+
+## 🔄 Example System Flow
+
+```text
+User registers
+    ↓
+User logs in
+    ↓
+Creates team
+    ↓
+Adds members
+    ↓
+Creates tasks
+    ↓
+Assigns tasks
+    ↓
+Members collaborate via comments
+```
+
+---
+
+## 📈 Engineering Decisions
+
+### Why RBAC?
+
+* enables team collaboration
+* supports admin control
+* reflects real SaaS systems
+
+### Why Service Layer?
+
+* isolates business logic
+* improves testability
+* avoids bloated route handlers
+
+### Why Soft Deletes?
+
+* preserves historical data
+* prevents accidental loss
+* production-aligned design
+
+---
+
+## 🚧 Future Improvements
+
+* audit logging
+* notifications system
+* WebSocket real-time updates
+* background jobs (Celery)
+* Redis caching
+* rate limiting
+* CI/CD pipeline
+
+---
+
+## 👤 Author
+
+**Simbarashe Munatsi**
+
+---
+
+## ⭐ Final Note
+
+This project demonstrates backend engineering beyond CRUD.
+
+It reflects the shift from:
+
+> “building APIs” → **designing production-ready backend systems**
+
+---
